@@ -2,7 +2,7 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import Select from 'react-select';
 
-import { MediaTypes, MediaRating, MediaSort, OrderTypeAnime, mediaStatus, MediaTypesMange, mediaStatusManga } from '@/utils/constants';
+import { MediaTypes, MediaRating, MediaSort, OrderTypeAnime, mediaStatus, MediaTypesMange, mediaStatusManga, OrderTypeManga } from '@/utils/constants';
 
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
 import { IGenres } from '@/types';
@@ -104,8 +104,8 @@ const Filter = ({genres, pageType}: { genres: IGenres[], pageType: string }) => 
             className="basic-select"
             classNamePrefix='basic-select'
             isClearable
-            options={OrderTypeAnime}
-            value={OrderTypeAnime.find(option => option.value === valueParams('order_by'))}
+            options={ pageType === 'anime' ? OrderTypeAnime : OrderTypeManga }
+            value={ (pageType === 'anime' ? OrderTypeAnime : OrderTypeManga).find(option => option.value === valueParams('order_by'))}
             onChange={selectedOption => changeSelectFilters(selectedOption, 'order_by')}
           />
         </div>

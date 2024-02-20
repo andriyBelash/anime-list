@@ -34,7 +34,7 @@ export const mediaStatusManga = [
 ]
 
 export const MediaRating = [
-  {value: 'p', label: 'All Ages'},
+  {value: 'g', label: 'All Ages'},
   {value: 'pg', label: 'Children'},
   {value: 'pg13', label: 'Teens 13 or older'},
   {value: 'r17', label: '17+ (violence & profanity)'},
@@ -51,6 +51,15 @@ export const OrderTypeAnime = [
   {value: 'mal_id', label: 'ID'},
   {value: 'title', label: 'Title'},
   {value: 'episodes', label: 'Episodes'},
+  {value: 'score', label: 'Score'},
+  {value: 'popularity', label: 'Popularity'},
+]
+
+export const OrderTypeManga = [
+  {value: 'mal_id', label: 'ID'},
+  {value: 'title', label: 'Title'},
+  {value: 'chapters', label: 'Chapters'},
+  {value: 'rank', label: 'Rank'},
   {value: 'score', label: 'Score'},
   {value: 'popularity', label: 'Popularity'},
 ]

@@ -3,12 +3,15 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next'
 
 import Filter from './components/Filter';
+import List from '@/app/components/List';
+import MediaItem from './components/MediaItem';
 
 import type { IGenres } from '@/types';
-import type { IAnimeData } from '@/types/anime';
-import type { IMangeData } from '@/types/manga';
+import type { IAnimeData, IAnimeList } from '@/types/anime';
+import type { IMangeData, IMangeList } from '@/types/manga';
 
 import { fetchWrapper } from '@/utils/fetchWrapper';
+
 
 type PagePropType = {
   params: { type: string },
@@ -20,7 +23,6 @@ export async function generateMetadata({params}: PagePropType): Promise<Metadata
 }
 
 const getData = async (type: string, params: string): Promise<IAnimeData | IMangeData> => {
-  console.log(`/${type}${params}`)
   const res = await fetchWrapper<IAnimeData | IMangeData>(`/${type}?${params}`)
   return res
 }
@@ -30,13 +32,15 @@ const page = async ({params: { type }, searchParams}: PagePropType ) => {
 
   const params = new URLSearchParams(searchParams)
   const data = await getData(type, params.toString())
+  const items: IAnimeList[] = Array.isArray(data.data) ? data.data as IAnimeList[] : [];
   const genres = await fetchWrapper<{data: IGenres[]}>('/genres/'+type)
-  console.log(data)
   return (
     <div className='mt-5 grid grid-cols-filter gap-6'>
-      <div className='bg-red'></div>
+      <List 
+        items={items}
+        renderItem={(item: IAnimeList | IMangeList) => <MediaItem type={type} item={item} />}
+      />
       <Filter genres={genres.data} pageType={type}/>
-      <div className='text-white'>{ JSON.stringify(data) }</div>
     </div>
   )
 }
