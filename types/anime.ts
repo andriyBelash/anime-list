@@ -348,3 +348,91 @@ export interface Streaming {
   url: string
 }
 
+// anime characters
+
+export interface IAnimeCharacters {
+  data: Daum[]
+}
+
+export interface Daum {
+  character: Character
+  role: string
+  voice_actors: VoiceActor[]
+}
+
+export interface Character {
+  mal_id: number
+  url: string
+  images: Images
+  name: string
+}
+
+export interface Images {
+  jpg: Jpg
+  webp: Webp
+}
+
+export interface Jpg {
+  image_url: string
+  small_image_url: string
+}
+
+export interface Webp {
+  image_url: string
+  small_image_url: string
+}
+
+export interface VoiceActor {
+  person: Person
+  language: string
+}
+
+export interface Person {
+  mal_id: number
+  url: string
+  images: Images2
+  name: string
+}
+
+export interface Images2 {
+  jpg: Jpg2
+}
+
+export interface Jpg2 {
+  image_url: string
+}
+
+
+// anime recomendations
+
+export interface IAnimeRecommendations {
+  data: Daum[]
+}
+
+export interface Daum {
+  entry: Entry
+}
+
+export interface Entry {
+  mal_id: number
+  url: string
+  images: Images
+  title: string
+}
+
+export interface Images {
+  jpg: Jpg
+  webp: Webp
+}
+
+export interface Jpg {
+  image_url: string
+  small_image_url: string
+  large_image_url: string
+}
+
+export interface Webp {
+  image_url: string
+  small_image_url: string
+  large_image_url: string
+}

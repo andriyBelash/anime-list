@@ -1,6 +1,6 @@
 import React from 'react'
 import type { Metadata, ResolvingMetadata } from 'next'
-import { getAnimeFullById } from '@/utils/services/anime/fetch'
+import { getAnimeFullById, getAnimeCharacters, getAnimeRecommendations } from '@/utils/services/anime/fetch'
 import { generateLink } from '@/utils/functions'
 
 import { notFound } from 'next/navigation'
@@ -35,12 +35,16 @@ const AnimePage = async ({ params: { type, linkId }}: PagePropType): Promise<Rea
   if(!ID) notFound()
 
   const { data: anime } = await getAnimeFullById(Number(ID))
+  const { data: characters } = await getAnimeCharacters(Number(ID))
+  const { data: recommendations } = await getAnimeRecommendations(Number(ID))
+
+  
+
 
   if(!anime || anime.status == String(404)) notFound()
 
   return (
     <div className='mt-5 h-full'>
-      <LogFile data={anime}/>
       <div className='max-w-7xl mx-auto bg-[#272D3E] p-4 h-full grid grid-cols-id gap-6'>
         <div>
           <AnimeTrailer imageUrl={anime.images.webp.large_image_url} youtubeUrl={anime.trailer.embed_url}/>
@@ -95,6 +99,7 @@ const AnimePage = async ({ params: { type, linkId }}: PagePropType): Promise<Rea
             <span className='block'>Synopsis:</span>
             <strong className='mt-2 block'>{anime.synopsis}</strong>
           </p>
+          <Link className='mt-5 inline-block underline' href={`/anime-episodes/${linkId}`}>Watch episodes</Link>
           <div className='border-b border-b-[#FF6A3D] mt-7'></div>
           <Show when={Boolean(anime.genres && anime.genres[0])}>
             <div className='mt-5'>
@@ -123,6 +128,43 @@ const AnimePage = async ({ params: { type, linkId }}: PagePropType): Promise<Rea
                 items={anime.streaming}
                 className='flex gap-3 mt-2 flex-wrap '
                 renderItem={(item) => <Link className='rounded whitespace-nowrap border border-[#FF6A3D] text-[#FF6A3D] px-4 py-2 mt-2 block' target='blank'  href={item.url}>{item.name}</Link>}
+              />
+            </div>
+          </Show>
+          <Show when={Boolean(characters && characters[0])}>
+            <div className='mt-5'>
+              <strong className='text-2xl block'>Characters:</strong>
+              <div className='border-b border-b-[#FF6A3D] mt-7'></div>
+              <List
+                items={characters.length > 10 ? characters.slice(0, 10) : characters}
+                className='grid grid-cols-2 gap-4 mt-3'
+                renderItem={(item) => 
+                  <Link href={'/'} className='flex gap-3 hover:bg-[#1A2238] p-2'>
+                    <img src={item.character.images.jpg.image_url} className='w-[50px] h-[50px] object-cover'/>
+                    <div className='flex flex-col justify-between'>
+                      <span className='text-md'>{item.character.name}</span>
+                      <span className='text-sm'>{item.role}</span>
+                    </div>
+                  </Link>
+                }
+              />
+            </div>
+          </Show>
+          <Show when={Boolean(recommendations && recommendations[0])}>
+          <div className='mt-5'>
+              <strong className='text-2xl block'>Recommendations:</strong>
+              <div className='border-b border-b-[#FF6A3D] mt-7'></div>
+              <List
+                items={recommendations.length > 10 ? recommendations.slice(0, 10) : recommendations}
+                className='grid gap-4 mt-3'
+                renderItem={(item) => 
+                  <Link href={`/${type}/${generateLink(item.entry.title, item.entry.mal_id)}`} className='flex gap-3 hover:bg-[#1A2238] p-2'>
+                    <img src={item.entry.images.webp.image_url} className='w-[80px] h-[80px] object-cover'/>
+                    <div className='flex flex-col justify-between'>
+                      <span className='text-md'>{item.entry.title}</span>
+                    </div>
+                  </Link>
+                }
               />
             </div>
           </Show>
