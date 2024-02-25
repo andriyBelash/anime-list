@@ -2,28 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background: #1A2238;
+  color: white;
 }
 
 @layer utilities {
@@ -51,24 +34,31 @@ body {
 
 
 .basic-select{
-  background-color: white;
+  background-color: #1A2238;
+  color: #FF6A3D!important
 }
-.basic-select__placeholder, .basic-select__indicator{
-  color: black!important
+.basic-select__placeholder, .basic-select__indicator, .basic-select__input-container, .basic-select__single-value{
+  color: #FF6A3D!important
 }
 
 .basic-select__control, .basic-select__menu{
-  border-color: black!important;
+  border-color: #FF6A3D!important;
+  background-color: #1A2238!important;
 }
 
-.basic-select__indicator-separator, .select__option--is-selected{
-  background-color: black!important;
+.basic-select__indicator-separator{
+  background-color: #FF6A3D!important;
 }
 
 .basic-select__option{
-  color: black!important
+  color: #FF6A3D!important
+}
+
+.basic-select__option--is-selected, .basic-select__option--is-focused{
+  background-color: #FF6A3D!important;
+  color: #1A2238!important
 }
 
 .link-active{
-  color: #6f6fff !important
+  color: #FF6A3D !important
 }

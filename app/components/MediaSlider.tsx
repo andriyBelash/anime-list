@@ -7,6 +7,8 @@ import 'swiper/css';
 import type { IMangeList } from '@/types/manga'
 import type { IAnimeList } from '@/types/anime'
 
+import { generateLink } from '@/utils/functions';
+
 import Link from 'next/link';
 
 type PropType = {
@@ -33,7 +35,7 @@ const MediaSlider = ({ type, data }: PropType) => {
           <div className='relative h-full'>
             <img src={slide.images.webp.large_image_url}/>
             <Link 
-              href={`/${type}/${slide.mal_id}`} 
+              href={`/${type}/${generateLink(slide.title_english ?? slide.title, slide.mal_id)}`} 
               className='absolute h-14 bottom-0 flex items-center justify-center w-full bg-black/[.8]'
             >
                 {slide.title_english ?? slide.title}

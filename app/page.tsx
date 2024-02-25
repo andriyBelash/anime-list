@@ -25,7 +25,7 @@ export default async function Home() {
       <MediaSlider type='anime' data={anime.data}/> 
       <Link
         href="/anime"
-        className="group mt-10 mb-32 rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+        className="group mt-10 mb-32 rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-[#FF6A3D] hover:text-[#FF6A3D]"
         rel="noopener noreferrer"
       >
         <h2 className={`mb-3 text-2xl font-semibold`}>
@@ -41,7 +41,7 @@ export default async function Home() {
       <MediaSlider type='manga' data={manga.data}/>
       <Link
         href="manga"
-        className="group mt-10 rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+        className="group mt-10 mb-32 rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-[#FF6A3D] hover:text-[#FF6A3D]"
         rel="noopener noreferrer"
       >
         <h2 className={`mb-3 text-2xl font-semibold`}>

@@ -5,6 +5,7 @@ import type { Metadata } from 'next'
 import Filter from './components/Filter';
 import List from '@/app/components/List';
 import MediaItem from './components/MediaItem';
+import AppPagination from '@/app/components/AppPagination';
 
 import type { IGenres } from '@/types';
 import type { IAnimeData, IAnimeList } from '@/types/anime';
@@ -34,12 +35,24 @@ const page = async ({params: { type }, searchParams}: PagePropType ) => {
   const data = await getData(type, params.toString())
   const items: IAnimeList[] = Array.isArray(data.data) ? data.data as IAnimeList[] : [];
   const genres = await fetchWrapper<{data: IGenres[]}>('/genres/'+type)
+
+  const currentPage = Number(searchParams?.page) || 1;
+
+
   return (
-    <div className='mt-5 grid grid-cols-filter gap-6'>
-      <List 
-        items={items}
-        renderItem={(item: IAnimeList | IMangeList) => <MediaItem type={type} item={item} />}
-      />
+    <div className='mt-5 flex flex-col-reverse gap-6'>
+      <div>
+        <List 
+          items={items}
+          renderItem={(item: IAnimeList | IMangeList) => <MediaItem type={type} item={item} />}
+          className='grid grid-cols-5 gap-4'
+        />
+        <div className='mt-24 mb-24 flex items-center justify-between'>
+          { data.pagination && data.pagination.last_visible_page > 1 ? <AppPagination pages={data.pagination.last_visible_page} currentPage={currentPage}/> : null}
+        </div>
+        
+      </div>
+
       <Filter genres={genres.data} pageType={type}/>
     </div>
   )

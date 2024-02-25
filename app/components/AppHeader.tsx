@@ -10,7 +10,7 @@ const AppHeader = () => {
 
   const pathname = usePathname()
   return (
-    <header className='p-5 flex justify-between items-center gap-3'>
+    <header className='p-5 flex justify-between items-center gap-3 bg-[#1A2238] border-b border-b-[#FF6A3D]'>
       <Link href='/' className=''>
         <Image
           src='/icon-white.png'

@@ -19,6 +19,9 @@ const Filter = ({genres, pageType}: { genres: IGenres[], pageType: string }) => 
     (name: string, value: string) => {
       const params = new URLSearchParams(searchParams.toString())
       value ? params.set(name, value) : params.delete(name)
+      if(name !== 'page') {
+        params.set('page', '1')
+      }
       router.push(`${pathname}?${params.toString()}`);
     },
     [searchParams]
@@ -54,10 +57,10 @@ const Filter = ({genres, pageType}: { genres: IGenres[], pageType: string }) => 
       const selectedGenres = genres
         .filter((i) => idx.includes(String(i.mal_id)))
         .map((i) => ({ label: i.name, value: i.mal_id }));
-      setFilters({ ...filter, genres: selectedGenres });
+      setFilters(prevstate  => ({ ...prevstate, genres: selectedGenres }));
     } else {
       // Reset genres if 'genres' parameter is not present in the URL
-      setFilters({ ...filter, genres: [] });
+      setFilters(prevstate  => ({ ...prevstate, genres: [] }));
     }
   };
   
@@ -73,68 +76,61 @@ const Filter = ({genres, pageType}: { genres: IGenres[], pageType: string }) => 
     }
   }
 
-  const changeCheckbox = (e: any, name: string) => {
-    changeSelectFilters(e.target.checked, name)
-    setFilters({ ...filter, [name]: e.target.checked})
-    createQueryString(name, String(e.target.checked))
-  }
-
-  const checkboxChecked = (name: string): boolean => {
-    return valueParams(name) ? valueParams(name) === 'true' : typeof filter[name] === 'string' ? filter[name] === 'true' : filter[name]
+  const clearFilter = () => {
+    router.push(`${pathname}?order_by=mal_id&sort=desc`)
   }
   useEffect(() => {
     setSort()
     const newFilters: Record<string, string> = {};
+    
     searchParams.forEach((val, key) => {
-      newFilters[key] = val;
+      if (key !== 'page') {
+        newFilters[key] = val;
+      }
     });
-    setFilters({ ...filter, ...newFilters });
+    setFilters(newFilters);
     setGenresValue()
   }, [searchParams]);
+  
 
 
   return (
     <div className='w-full'>
-      <h5 className='text-2xl'>Filter</h5>
-      <div className='p-4 bg-white mt-6 rounded-sm'>
-      <div className='flex flex-col gap-3 mt-3'>
-        <label className='text-black text-xl'>Sort type</label>
-        <Select
-            placeholder='Chose a sort'
-            className="basic-select"
-            classNamePrefix='basic-select'
-            isClearable
-            options={ pageType === 'anime' ? OrderTypeAnime : OrderTypeManga }
-            value={ (pageType === 'anime' ? OrderTypeAnime : OrderTypeManga).find(option => option.value === valueParams('order_by'))}
-            onChange={selectedOption => changeSelectFilters(selectedOption, 'order_by')}
-          />
-        </div>
-        <div className='flex flex-col gap-3 mt-3 mb-6'>
-        <label className='text-black text-xl'>Sort by</label>
+      <div className='p-4 mt-6 grid gap-5 grid-cols-4 rounded-sm'>
+        <div className='flex flex-col gap-3 '>
+          <label className='text-[#FF6A3D] text-xl'>Sort type</label>
           <Select
-            placeholder='Chose a sort'
-            className="basic-select"
-            classNamePrefix='basic-select'
-            isClearable
-            options={MediaSort}
-            value={MediaSort.find(option => option.value === valueParams('sort'))}
-            onChange={selectedOption => changeSelectFilters(selectedOption, 'sort')}
-          />
+              placeholder='Chose a sort'
+              className="basic-select"
+              classNamePrefix='basic-select'
+              options={ pageType === 'anime' ? OrderTypeAnime : OrderTypeManga }
+              value={ (pageType === 'anime' ? OrderTypeAnime : OrderTypeManga).find(option => option.value === valueParams('order_by'))}
+              onChange={selectedOption => changeSelectFilters(selectedOption, 'order_by')}
+            />
         </div>
-        <div className='w-full h-[1px] bg-black'></div>
-
-        <div className='flex flex-col gap-3 mt-3'>
-          <label className='text-black text-xl'>Name</label>
+        <div className='flex flex-col gap-3  mb-6'>
+          <label className='text-[#FF6A3D] text-xl'>Sort by</label>
+            <Select
+              placeholder='Chose a sort'
+              className="basic-select"
+              classNamePrefix='basic-select'
+              options={MediaSort}
+              value={MediaSort.find(option => option.value === valueParams('sort'))}
+              onChange={selectedOption => changeSelectFilters(selectedOption, 'sort')}
+            />
+        </div>
+        <div className='flex flex-col gap-3 '>
+          <label className='text-[#FF6A3D] text-xl'>Name</label>
           <input 
             onInput={(e) => changeSelectFilters(e.target, 'q')} 
-            className='h-[36px] rounded-sm px-2 border-black border text-black placeholder:text-black' 
+            className='h-[36px] rounded-sm px-2 border-[#FF6A3D] border text-[#FF6A3D] bg-[#1A2238] placeholder:text-[#FF6A3D]' 
             placeholder='Search name'
             value={filter.q}
           />
         </div>
 
-        <div className='flex flex-col gap-3 mt-3'>
-          <label className='text-black text-xl'>Type</label>
+        <div className='flex flex-col gap-3 '>
+          <label className='text-[#FF6A3D] text-xl'>Type</label>
           <Select
             placeholder='Chose a type'
             className="basic-select"
@@ -146,31 +142,31 @@ const Filter = ({genres, pageType}: { genres: IGenres[], pageType: string }) => 
           />
         </div>
 
-        <div className='flex flex-col gap-3 mt-3'>
-          <label className='text-black text-xl'>Score</label>
+        <div className='flex flex-col gap-3 '>
+          <label className='text-[#FF6A3D] text-xl'>Score</label>
           <input 
             onInput={(e) => changeSelectFilters(e.target, 'score')} 
             pattern="[1-9]" 
-            className='h-[36px] rounded-sm px-2 border-black border text-black placeholder:text-black' 
+            className='h-[36px] rounded-sm px-2 border-[#FF6A3D] border text-[#FF6A3D] bg-[#1A2238] placeholder:text-[#FF6A3D]' 
             placeholder='Search score'
             value={filter.score}
           />
         </div>
 
-        <div className='flex flex-col gap-3 mt-3'>
-          <label className='text-black text-xl'>Score range</label>
+        <div className='flex flex-col gap-3 '>
+          <label className='text-[#FF6A3D] text-xl'>Score range</label>
           <div className='flex gap-2 w-full'>
             <input 
               onInput={(e) => changeSelectFilters(e.target, 'min_score')} 
               pattern="[1-9]" 
-              className='h-[36px] rounded-sm px-2 border-black border text-black placeholder:text-black w-full' 
+              className='h-[36px] rounded-sm px-2 border-[#FF6A3D] border bg-[#1A2238] placeholder:text-[#FF6A3D] w-full' 
               placeholder='Search min score'
               value={filter.min_score}
             />
             <input 
               onInput={(e) => changeSelectFilters(e.target, 'max_score')} 
               pattern="[1-9]" 
-              className='h-[36px] rounded-sm px-2 border-black border text-black placeholder:text-black w-full' 
+              className='h-[36px] rounded-sm px-2 border-[#FF6A3D] border bg-[#1A2238] placeholder:text-[#FF6A3D] w-full' 
               placeholder='Search max score'
               value={filter.max_score}
             />
@@ -179,8 +175,8 @@ const Filter = ({genres, pageType}: { genres: IGenres[], pageType: string }) => 
         </div>
 
         {pageType === 'anime' ? 
-          <div className='flex flex-col gap-3 mt-3'>
-            <label className='text-black text-xl'>Rating</label>
+          <div className='flex flex-col gap-3 '>
+            <label className='text-[#FF6A3D] text-xl'>Rating</label>
             <Select
               placeholder='Chose a rating'
               className="basic-select"
@@ -189,18 +185,17 @@ const Filter = ({genres, pageType}: { genres: IGenres[], pageType: string }) => 
               options={MediaRating}
               value={MediaRating.find(option => option.value === valueParams('rating'))}
               onChange={selectedOption => changeSelectFilters(selectedOption, 'rating')}
+              menuPlacement='top'
+
             />
           </div>
           :
-        <div className="flex mt-3">
-          <input checked={checkboxChecked('sfw')} onChange={(e) => changeCheckbox(e, 'sfw')} type="checkbox" className="shrink-0 mt-0.5 border-gray-200 rounded text-black-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-800 dark:border-gray-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="sfw" />
-          <label htmlFor="sfw" className="text-xl text-black ms-3 dark:text-gray-400">For adult</label>
-        </div>
+        null
         }
 
 
-        <div className='flex flex-col gap-3 mt-3'>
-          <label className='text-black text-xl'>Status</label>
+        <div className='flex flex-col gap-3 '>
+          <label className='text-[#FF6A3D] text-xl'>Status</label>
           <Select
             placeholder='Chose a status'
             className="basic-select"
@@ -209,11 +204,13 @@ const Filter = ({genres, pageType}: { genres: IGenres[], pageType: string }) => 
             options={pageType === 'anime' ? mediaStatus : mediaStatusManga}
             value={(pageType === 'anime' ? mediaStatus : mediaStatusManga).find(option => option.value === valueParams('status'))}
             onChange={selectedOption => changeSelectFilters(selectedOption, 'status')}
+            menuPlacement='top'
+
           />
         </div>
 
-        <div className='flex flex-col gap-3 mt-3'>
-          <label className='text-black text-xl'>Genres</label>
+        <div className='flex flex-col gap-3 '>
+          <label className='text-[#FF6A3D] text-xl'>Genres</label>
           <Select
             placeholder='Chose a Genres'
             className="basic-select"
@@ -224,8 +221,11 @@ const Filter = ({genres, pageType}: { genres: IGenres[], pageType: string }) => 
             options={genres.map(i => ({ label: i.name, value: i.mal_id }))}
             closeMenuOnSelect={false}
             onChange={(e) => setMultipleValue(e)}
+            menuPlacement='top'
           />
         </div>
+
+        <button onClick={clearFilter} className='h-10 mt-10 flex items-center justify-center border border-[#FF6A3D] cursor-pointer w-full text-[#FF6A3D]'>Clear filter</button>
       </div>
     </div>
   )

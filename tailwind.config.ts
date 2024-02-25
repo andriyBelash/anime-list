@@ -16,7 +16,9 @@ const config: Config = withMT({
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       gridTemplateColumns: {
+        'id': '300px 1fr',
         'filter': '1fr 400px',
+        
       }
     },
   },
