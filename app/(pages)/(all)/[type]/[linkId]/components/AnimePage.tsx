@@ -4,7 +4,6 @@ import { getAnimeFullById, getAnimeCharacters, getAnimeRecommendations } from '@
 import { generateLink } from '@/utils/functions'
 
 import { notFound } from 'next/navigation'
-import { LogFile } from '@/app/components/LogFile'
 
 import List from '@/app/components/List'
 import Link from 'next/link'
@@ -37,9 +36,6 @@ const AnimePage = async ({ params: { type, linkId }}: PagePropType): Promise<Rea
   const { data: anime } = await getAnimeFullById(Number(ID))
   const { data: characters } = await getAnimeCharacters(Number(ID))
   const { data: recommendations } = await getAnimeRecommendations(Number(ID))
-
-  
-
 
   if(!anime || anime.status == String(404)) notFound()
 
@@ -99,7 +95,6 @@ const AnimePage = async ({ params: { type, linkId }}: PagePropType): Promise<Rea
             <span className='block'>Synopsis:</span>
             <strong className='mt-2 block'>{anime.synopsis}</strong>
           </p>
-          <Link className='mt-5 inline-block underline' href={`/anime-episodes/${linkId}`}>Watch episodes</Link>
           <div className='border-b border-b-[#FF6A3D] mt-7'></div>
           <Show when={Boolean(anime.genres && anime.genres[0])}>
             <div className='mt-5'>
@@ -139,7 +134,7 @@ const AnimePage = async ({ params: { type, linkId }}: PagePropType): Promise<Rea
                 items={characters.length > 10 ? characters.slice(0, 10) : characters}
                 className='grid grid-cols-2 gap-4 mt-3'
                 renderItem={(item) => 
-                  <Link href={'/'} className='flex gap-3 hover:bg-[#1A2238] p-2'>
+                  <Link href={`/characters/${generateLink(item.character.name, item.character.mal_id)}`} className='flex gap-3 hover:bg-[#1A2238] p-2'>
                     <img src={item.character.images.jpg.image_url} className='w-[50px] h-[50px] object-cover'/>
                     <div className='flex flex-col justify-between'>
                       <span className='text-md'>{item.character.name}</span>

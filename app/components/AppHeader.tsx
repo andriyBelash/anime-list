@@ -21,8 +21,8 @@ const AppHeader = () => {
       </Link>
       
       <div className='flex gap-6'>
-        <Link className={`text-xl hover:underline ${!!pathname.includes('anime') ? 'link-active' : ''}` } href='/anime?order_by=mal_id&sort=desc'>Anime</Link>
-        <Link className={`text-xl hover:underline ${!!pathname.includes('manga') ? 'link-active' : ''}` } href='/manga?order_by=mal_id&sort=desc'>Manga</Link>
+        <Link className={`text-xl hover:underline ${!!pathname.includes('anime') ? 'link-active' : ''}` } href='/anime?order_by=score&sort=desc'>Anime</Link>
+        <Link className={`text-xl hover:underline ${!!pathname.includes('manga') ? 'link-active' : ''}` } href='/manga?order_by=score&sort=desc'>Manga</Link>
       </div>
     </header>
   )

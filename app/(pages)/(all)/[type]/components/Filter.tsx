@@ -67,7 +67,7 @@ const Filter = ({genres, pageType}: { genres: IGenres[], pageType: string }) => 
   const setSort = () => {
     const params = new URLSearchParams(searchParams.toString())
     if(!params.has('order_by')) {
-      params.set('order_by', 'mal_id')
+      params.set('order_by', 'score')
       router.push(`${pathname}?${params.toString()}`)
     }
     if(!params.has('sort')) {
